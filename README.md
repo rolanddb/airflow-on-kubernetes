@@ -2,7 +2,7 @@
 
 Recently I spend quite some time diving into [Airflow](https://airflow.incubator.apache.org/) and [Kubernetes](https://kubernetes.io). While there are reports of people using them together, I could not find any comprehensive guide or tutorial. Also, there are many forks and abandoned scripts and repositories. So you need to do some research.
 
-Here I write down what I've found, in the hope that it is helpful to others. Because things move quickly, I've decided to put this on Github rather than in a blob post, so it can be easily updated. Please do not hesitate to provide updates, suggestions, fixes etc.
+Here I write down what I've found, in the hope that it is helpful to others. Because things move quickly, I've decided to put this on Github rather than in a blog post, so it can be easily updated. Please do not hesitate to provide updates, suggestions, fixes etc.
 
 ## Decide what you want
 There are some related, but different scenarios:
@@ -20,7 +20,7 @@ The reason that I make this distinction is that you typically need to perform so
 The simplest way to achieve this, is by using the kubectl commandline utility (in a BashOperator) or the [python sdk](https://github.com/kubernetes-client/python).
 However, you can also deploy your Celery workers on Kubernetes. The Helm chart mentioned below does this.
 
-####KubernetesPodExecutor (coming in 1.10)
+#### KubernetesPodExecutor (coming in 1.10)
 
 In the next release of Airflow, a new Operator will be introduced that leads to a better, native integration of Airflow with Kubernetes. The cool thing about this executor will be that you can define custom Docker images per task. 
 Previously, if your task requires some python library or other dependency, you'll need to install that on the workers. So your workers end up hosting the combination of all dependencies of all your DAGs.
@@ -43,7 +43,8 @@ There is some work in this area, but it is not completely finished yet.
   
 For installation instructions, follow the [readme](https://github.com/gsemet/charts/blob/airflow/incubator/airflow/README.md). Basically it is as simple as 
 
-```helm install --namespace "airflow" --name "airflow" incubator/airflow
+```bash
+helm install --namespace "airflow" --name "airflow" incubator/airflow
 ```  
 
 
@@ -67,4 +68,7 @@ If you are on Azure, you can use [Azure File Storage (AFS)](https://docs.microso
 If you mount the PV as ReadOnlyMany, you get reasonable security because the DAG files cannot be manipulated from within the Kubernetes cluster. You can then update the DAG files via another channel, for example, your build server.
 
 ## RBAC
-If your cluster has RBAC turned on, and you want to launch Pods from Airflow, you will need to bind the appropriate roles to the serviceAccount of the Pod that wants to schedule other Pods. Typically, this means that the Workers (when using CeleryExecutor) or the Scheduler (using LocalExecutor or the new KubernetesPodExecutor) need extra permissions. You'll need to grant the 'watch/create' verbs on Pods.
+If your cluster has [RBAC](https://kubernetes.io/docs/admin/authorization/rbac/) turned on, and you want to launch Pods from Airflow, you will need to bind the appropriate roles to the serviceAccount of the Pod that wants to schedule other Pods. Typically, this means that the Workers (when using CeleryExecutor) or the Scheduler (using LocalExecutor or the new KubernetesPodExecutor) need extra permissions. You'll need to grant the 'watch/create' verbs on Pods.
+
+## Relevant links
+* [Awesome Apache Airflow](https://github.com/jghoman/awesome-apache-airflow)
