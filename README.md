@@ -17,14 +17,24 @@ The reason that I make this distinction is that you typically need to perform so
 
 ### [1] Scheduling jobs on Kubernetes
 
-The simplest way to achieve this, is by using the kubectl commandline utility (in a BashOperator) or the [python sdk](https://github.com/kubernetes-client/python).
+The simplest way to achieve this right now, is by using the kubectl commandline utility (in a BashOperator) or the [python sdk](https://github.com/kubernetes-client/python).
 However, you can also deploy your Celery workers on Kubernetes. The Helm chart mentioned below does this.
 
-#### KubernetesPodExecutor (coming in 1.10)
+#### Native Kubernetes integration
+Work is in progress that should lead to native support by Airflow for scheduling jobs on Kubernetes. The wiki contains a [discussion](https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=71013666) about what this will look like, though the pages haven't been updated in a while. Progress can be tracked in Jira ([AIRFLOW-1314](https://issues.apache.org/jira/browse/AIRFLOW-1314)).
 
-In the next release of Airflow, a new Operator will be introduced that leads to a better, native integration of Airflow with Kubernetes. The cool thing about this executor will be that you can define custom Docker images per task. 
+Development is being done in a fork of Airflow at [bloomberg/airflow](https://github.com/bloomberg/airflow). This is still work in progress so deploying it should probably not be done in production.
+
+
+
+#### KubernetesPodOperator (coming in 1.10)
+A subset of functionality will be released earlier, according to [AIRFLOW-1517](https://issues.apache.org/jira/browse/AIRFLOW-1517).
+
+In the next release of Airflow (1.10), a new Operator will be introduced that leads to a better, native integration of Airflow with Kubernetes. The cool thing about this executor will be that you can define custom Docker images per task. 
 Previously, if your task requires some python library or other dependency, you'll need to install that on the workers. So your workers end up hosting the combination of all dependencies of all your DAGs.
 I think eventually this can replace the CeleryExecutor for many installations.
+
+
 
 ### [2] Running Airflow on Kubernetes
 Airflow is implemented in a modular way. The main components are the scheduler, the webserver, and workers.
@@ -40,6 +50,7 @@ There is some work in this area, but it is not completely finished yet.
   * This is a great start. Originally forked from [mumoshu/kube-airflow](https://github.com/mumoshu/kube-airflow) which seems abandoned. 
 * [gsemet/charts@airflow](https://github.com/gsemet/charts/tree/airflow/incubator/airflow)
   * This is where the current development happens (on the airflow branch). [This PR](https://github.com/kubernetes/charts/pull/3959) is to get it merged into the [kubernetes/charts repository](https://github.com/kubernetes/charts). 
+* [bloomberg/airflow](https://github.com/bloomberg/airflow/blob/airflow-kubernetes-executor/scripts/ci/kubernetes/kube/airflow.yaml.template) This repository contains a Kubernetes manifest that may be inspected for inspiration.  
   
 For installation instructions, follow the [readme](https://github.com/gsemet/charts/blob/airflow/incubator/airflow/README.md). Basically it is as simple as 
 
