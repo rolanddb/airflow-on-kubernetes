@@ -34,6 +34,8 @@ In the next release of Airflow (1.10), a new Operator will be introduced that le
 Previously, if your task requires some python library or other dependency, you'll need to install that on the workers. So your workers end up hosting the combination of all dependencies of all your DAGs.
 I think eventually this can replace the CeleryExecutor for many installations.
 
+Documentation for the new Operator [can be found here](https://github.com/apache/incubator-airflow/blob/master/docs/kubernetes.rst).
+
 
 
 ### [2] Running Airflow on Kubernetes
