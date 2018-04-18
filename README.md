@@ -30,7 +30,7 @@ Development is being done in a fork of Airflow at [bloomberg/airflow](https://gi
 #### KubernetesPodOperator (coming in 1.10)
 A subset of functionality will be released earlier, according to [AIRFLOW-1517](https://issues.apache.org/jira/browse/AIRFLOW-1517).
 
-In the next release of Airflow (1.10), a new Operator will be introduced that leads to a better, native integration of Airflow with Kubernetes. The cool thing about this executor will be that you can define custom Docker images per task. 
+In the next release of Airflow (1.10), a new Operator will be introduced that leads to a better, native integration of Airflow with Kubernetes. The cool thing about this Operator will be that you can define custom Docker images per task. 
 Previously, if your task requires some python library or other dependency, you'll need to install that on the workers. So your workers end up hosting the combination of all dependencies of all your DAGs.
 I think eventually this can replace the CeleryExecutor for many installations.
 
