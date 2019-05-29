@@ -43,26 +43,38 @@ Airflow is implemented in a modular way. The main components are the scheduler, 
 You also probably want a database.
 If you want to distribute workers, you may want to use the CeleryExecutor. In that case, you'll probably want Flower (a UI for Celery) and you need a queue, like RabbitMQ or Redis.
 
+
+
+## Docker images
 First thing you need is a Docker image that packages Airflow. Most people seem to use [puckel/docker-airflow](https://github.com/puckel/docker-airflow). This is a robust Docker image that is up to date and also has an automated build set up, pushing images to Dockerhub. This means that you do not need to build your own image when you are first starting out. The image has an [entrypoint script](https://github.com/puckel/docker-airflow/blob/master/script/entrypoint.sh) that allows the container to fulfill the role of scheduler, webserver, flower, or worker.
 
-Next you need to create some Kubernetes manifests, or a Helm chart.
-There is some work in this area, but it is not completely finished yet.
-#### Relevant projects
-* [gsemet/kube-airflow](https://github.com/gsemet/kube-airflow/)
-  * This is a great start. Originally forked from [mumoshu/kube-airflow](https://github.com/mumoshu/kube-airflow) which seems abandoned. 
-* [gsemet/charts@airflow](https://github.com/gsemet/charts/tree/airflow/incubator/airflow)
-  * This is where the current development happens (on the airflow branch). [This PR](https://github.com/kubernetes/charts/pull/3959) is to get it merged into the [kubernetes/charts repository](https://github.com/kubernetes/charts). 
-* [bloomberg/airflow](https://github.com/bloomberg/airflow/blob/airflow-kubernetes-executor/scripts/ci/kubernetes/kube/airflow.yaml.template) This repository contains a Kubernetes manifest that may be inspected for inspiration.  
-  
-For installation instructions, follow the [readme](https://github.com/gsemet/charts/blob/airflow/incubator/airflow/README.md). Basically it is as simple as 
+While `puckel/docker-airflow` is widely used, it isn't updated very often anymore, so it is lagging behind Airflow releases a bit. Many people are forking this repo and updating it themselves. At this point the Airflow community is lacking a canonical Docker image.
+
+* [puckel/docker-airflow](https://hub.docker.com/r/puckel/docker-airflow)
+
+Another option may be the image by astronomer.io, though I cannot find the Dockerfile source, so at this point I'm hesitant to run it:
+
+* [astronomerinc/ap-airflow](https://hub.docker.com/r/astronomerinc/ap-airflow)
+
+
+## Helm
+Next you need to create some Kubernetes manifests, or a Helm chart, to deploy the Docker image on Kubernetes. There is some work in this area, but it is not completely finished yet. 
+
+There are two helm charts to install Airflow on kubernetes:
+
+* [Official Helm chart](https://github.com/helm/charts/tree/master/stable/airflow)
+* [astronomer.io chart](https://github.com/astronomer/helm.astronomer.io/tree/master/charts/airflow)
+
+To install the official chart: 
 
 ```bash
-helm install --namespace "airflow" --name "airflow" incubator/airflow
+helm install --namespace "airflow" --name "airflow" stable/airflow
 ```  
 
 
 ## Deploying your DAGs
 There are several ways to deploy your DAG files when running Airflow on Kubernetes.
+
 1. git-sync
 2. Persistent Volume
 3. Embedding in Docker container
