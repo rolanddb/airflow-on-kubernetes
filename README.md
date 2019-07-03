@@ -74,6 +74,12 @@ To install the official chart:
 helm install --namespace "airflow" --name "airflow" stable/airflow
 ```  
 
+## Kubernetes Operator
+
+There is work by Google on a [Kubernetes Operator for Airflow](https://github.com/GoogleCloudPlatform/airflow-operator). This name is quite confusing, as *operator* here refers to a [controller for an application on Kubernetes](https://coreos.com/blog/introducing-operators.html), not an Airflow Operator that describes a task. So you would use this operator instead of using the Helm chart to deploy Kubernetes itself.
+
+
+
 
 ## Deploying your DAGs
 There are several ways to deploy your DAG files when running Airflow on Kubernetes.
