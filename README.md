@@ -60,10 +60,13 @@ Another option may be the image by astronomer.io, though I cannot find the Docke
 ## Helm
 Next you need to create some Kubernetes manifests, or a Helm chart, to deploy the Docker image on Kubernetes. There is some work in this area, but it is not completely finished yet. 
 
-There are two helm charts to install Airflow on kubernetes:
+There are several helm charts to install Airflow on kubernetes:
 
 * [Official Helm chart](https://github.com/helm/charts/tree/master/stable/airflow)
 * [astronomer.io chart](https://github.com/astronomer/helm.astronomer.io/tree/master/charts/airflow)
+* [GoDataDriven chart](https://github.com/godatadriven/airflow-helm)
+
+It's a bit unfortunate that the community has not yet arrived at a canonical Chart, so you'll have to try your luck. The 'official' chart probably covers most deployment options, including Celery and non-Kubernetes options, while the others may be more opinionated (and focused).
 
 To install the official chart: 
 
